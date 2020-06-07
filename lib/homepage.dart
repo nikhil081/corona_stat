@@ -5,6 +5,10 @@ import 'dart:convert';
 import "package:http/http.dart" as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_country_picker/flutter_country_picker.dart';
+import 'package:page_view_indicators/page_view_indicators.dart';
+import 'first.dart';
+import 'second.dart';
+import 'third.dart';
 
 String countryname;
 
@@ -18,15 +22,18 @@ class my extends StatefulWidget {
 
 class myy extends State<my> {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-
   var getdata;
   String url = "https://covid-19-data.p.rapidapi.com/totals";
-
   var data;
   var conf;
   var rec;
   var dea;
   Country _selected;
+  final _items = [new fst(), new sst(), new tst()];
+  final _pageController = PageController();
+  final _currentPageNotifier = ValueNotifier<int>(0);
+  final _boxHeight = 150.0;
+  int _currentPage = 0;
 
   Future<String> makeRequest() async {
     var response = await http.get((url), headers: {
@@ -79,6 +86,19 @@ class myy extends State<my> {
   @override
   void initState() {
     super.initState();
+    Timer.periodic(Duration(seconds: 3), (Timer timer) {
+      if (_currentPage < 2) {
+        _currentPage++;
+      } else {
+        _currentPage = 0;
+      }
+
+      _pageController.animateToPage(
+        _currentPage,
+        duration: Duration(milliseconds: 350),
+        curve: Curves.easeIn,
+      );
+    });
     this.makeRequest();
     getCurrentUser();
   }
@@ -99,12 +119,10 @@ class myy extends State<my> {
         body: SingleChildScrollView(
           child: Container(
             height: hei,
+            color: Color(0xff192A56),
             child: Column(
               children: <Widget>[
-                new Container(
-                  height: hei * 0.3,
-                  color: Colors.black,
-                ),
+                _buildBody(),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                   child: Container(
@@ -245,5 +263,55 @@ class myy extends State<my> {
         )
         // This trailing comma makes auto-formatting nicer for build methods.
         );
+  }
+
+  _buildBody() {
+    return Column(children: <Widget>[
+      Stack(
+        children: <Widget>[
+          _buildPageView(),
+          _buildCircleIndicator(),
+        ],
+      )
+    ]);
+  }
+
+  _buildPageView() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.orange,
+            border: Border.all(
+              color: Colors.red[500],
+            ),
+            borderRadius: BorderRadius.all(Radius.circular(20))),
+        height: _boxHeight,
+        child: PageView.builder(
+            itemCount: _items.length,
+            controller: _pageController,
+            itemBuilder: (BuildContext context, int index) {
+              return Center(child: _items[index]);
+            },
+            onPageChanged: (int index) {
+              _currentPageNotifier.value = index;
+            }),
+      ),
+    );
+  }
+
+  _buildCircleIndicator() {
+    return Positioned(
+      left: 0.0,
+      right: 0.0,
+      bottom: 0.0,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: CirclePageIndicator(
+          itemCount: _items.length,
+          currentPageNotifier: _currentPageNotifier,
+        ),
+      ),
+    );
   }
 }
