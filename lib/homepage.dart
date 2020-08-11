@@ -114,7 +114,15 @@ class myy extends State<my> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text("Stat"),
+          backgroundColor: Color(0xff192A56),
+          bottomOpacity: 0.0,
+          elevation: 0.0,
+          leading: Builder(builder: (BuildContext context) {
+            return IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: () {},
+            );
+          }),
         ),
         body: SingleChildScrollView(
           child: Container(
@@ -132,7 +140,7 @@ class myy extends State<my> {
                           color: Colors.red[500],
                         ),
                         borderRadius: BorderRadius.all(Radius.circular(20))),
-                    height: hei * 0.15,
+                    height: hei * 0.20,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[

@@ -7,13 +7,13 @@ class tst extends StatefulWidget {
     return tsst();
   }
 }
-class tsst extends State<tst>{
+
+class tsst extends State<tst> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-  return Container(
-    child: Text("third"),
-  );
+    return Container(
+      child: Text("third"),
+    );
   }
-
 }

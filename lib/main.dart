@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import "homepage.dart";
 import "splash.dart";
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 void main() {
   runApp(MyApp());
 }
@@ -21,8 +18,6 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/homepage': (BuildContext context) => new my(),
         '/registerpage': (BuildContext context) => new reg(),
-
-        //about
       },
       home: spl(),
       debugShowCheckedModeBanner: false,
